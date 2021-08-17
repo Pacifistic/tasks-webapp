@@ -19,7 +19,7 @@ public class AuthController {
         String message;
         try {
             userService.signup(user);
-            message = "Signed up Successfully";
+            message = user.getUsername() + " Signed up Successfully";
             return ResponseEntity.ok(message);
         }
         catch (UserException e){

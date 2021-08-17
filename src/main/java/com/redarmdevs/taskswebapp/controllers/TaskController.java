@@ -34,9 +34,32 @@ public class TaskController {
             message = "task '" + task.getName() + "' added successfully!";
             return ResponseEntity.ok(message);
         }
-        catch (TaskException e){
+        catch (UserException e){
             message = "task failed to be added: " + e.getMessage();
             return ResponseEntity.badRequest().body(message);
+        }
+    }
+
+    @DeleteMapping(path = {"{user}"})
+    public ResponseEntity<String> deleteTask(@PathVariable(name="user") String username, @RequestParam(name = "taskID") Long taskID){
+        String message;
+        try{
+            taskService.deleteTask(username, taskID);
+            message = "task deleted successfully";
+            return ResponseEntity.ok(message);
+        } catch (TaskException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @DeleteMapping(path = "{user}/deleteTasks")
+    public ResponseEntity<String> deleteAllUsersTasks(@PathVariable(name="user") String username){
+        try{
+            taskService.deleteAllTasksByUser(username);
+            String message = "All tasks by " + username + " deleted successfully";
+            return ResponseEntity.ok(message);
+        } catch (UserException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 }
