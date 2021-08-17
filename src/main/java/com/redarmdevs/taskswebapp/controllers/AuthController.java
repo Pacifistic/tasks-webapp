@@ -1,8 +1,7 @@
 package com.redarmdevs.taskswebapp.controllers;
 
-import com.redarmdevs.taskswebapp.message.ResponseMessage;
+import com.redarmdevs.taskswebapp.exceptions.UserException;
 import com.redarmdevs.taskswebapp.models.User;
-import com.redarmdevs.taskswebapp.repositories.UserRepository;
 import com.redarmdevs.taskswebapp.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,16 +15,16 @@ public class AuthController {
     UserService userService;
 
     @PostMapping(path = "signup")
-    public ResponseEntity<ResponseMessage> signup(@RequestBody User user){
+    public ResponseEntity<String> signup(@RequestBody User user){
         String message;
         try {
             userService.signup(user);
             message = "Signed up Successfully";
-            return ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage(message));
+            return ResponseEntity.ok(message);
         }
-        catch (Exception e){
+        catch (UserException e){
             message = "Failed to signup: " + e.getMessage();
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseMessage(message));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(message);
         }
     }
 }
