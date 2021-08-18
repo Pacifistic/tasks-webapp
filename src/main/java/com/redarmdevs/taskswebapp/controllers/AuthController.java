@@ -121,27 +121,4 @@ public class AuthController {
 
         return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
     }
-
-
-
-
-
-
-
-//    @Autowired
-//    UserService userService;
-//
-//    @PostMapping(path = "signup")
-//    public ResponseEntity<String> signup(@RequestBody User user){
-//        String message;
-//        try {
-//            userService.signup(user);
-//            message = user.getUsername() + " Signed up Successfully";
-//            return ResponseEntity.ok(message);
-//        }
-//        catch (UserException e){
-//            message = "Failed to signup: " + e.getMessage();
-//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(message);
-//        }
-//    }
 }

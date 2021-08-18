@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.security.Principal;
 import java.util.Collections;
 
@@ -35,7 +36,7 @@ public class TaskController {
     @PostMapping(path = "{user}")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<?> addTask(@PathVariable(name = "user") String username,
-                                          @RequestBody Task task,
+                                          @Valid @RequestBody Task task,
                                           Principal principal){
         if(!principal.getName().equals(username))
             return ResponseEntity.badRequest().body(new MessageResponse("Error: Unauthorized"));
