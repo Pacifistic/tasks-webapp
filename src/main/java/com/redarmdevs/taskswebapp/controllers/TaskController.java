@@ -6,11 +6,12 @@ import com.redarmdevs.taskswebapp.models.Task;
 import com.redarmdevs.taskswebapp.services.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
-import java.util.Set;
 
+@CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping(path = "api/task")
 public class TaskController {
@@ -18,15 +19,19 @@ public class TaskController {
     TaskService taskService;
 
     @GetMapping(path = "{user}")
-    public Set<Task> getTasks(@PathVariable(name = "user") String user){
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<?> getTasks(@PathVariable(name = "user") String user){
         try {
-            return taskService.getTasks(user);
+            return ResponseEntity.ok(taskService.getTasks(user));
+            //return taskService.getTasks(user);
         } catch (UserException e) {
-            return Collections.emptySet();
+            return ResponseEntity.badRequest().body(Collections.emptySet());
+            //return Collections.emptySet();
         }
     }
 
     @PostMapping(path = "{user}")
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<String> addTask(@PathVariable(name = "user") String username, @RequestBody Task task){
         String message;
         try {
@@ -41,6 +46,7 @@ public class TaskController {
     }
 
     @DeleteMapping(path = {"{user}"})
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<String> deleteTask(@PathVariable(name="user") String username, @RequestParam(name = "taskID") Long taskID){
         String message;
         try{
@@ -53,6 +59,7 @@ public class TaskController {
     }
 
     @DeleteMapping(path = "{user}/deleteTasks")
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<String> deleteAllUsersTasks(@PathVariable(name="user") String username){
         try{
             taskService.deleteAllTasksByUser(username);
