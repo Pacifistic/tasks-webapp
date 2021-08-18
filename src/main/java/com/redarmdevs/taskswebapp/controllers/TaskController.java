@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.Collections;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -20,19 +21,23 @@ public class TaskController {
 
     @GetMapping(path = "{user}")
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<?> getTasks(@PathVariable(name = "user") String user){
+    public ResponseEntity<?> getTasks(@PathVariable(name = "user") String user, Principal principal){
+        if(!principal.getName().equals(user))
+            return ResponseEntity.badRequest().body("Error: Unauthorized");
         try {
             return ResponseEntity.ok(taskService.getTasks(user));
-            //return taskService.getTasks(user);
         } catch (UserException e) {
             return ResponseEntity.badRequest().body(Collections.emptySet());
-            //return Collections.emptySet();
         }
     }
 
     @PostMapping(path = "{user}")
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<String> addTask(@PathVariable(name = "user") String username, @RequestBody Task task){
+    public ResponseEntity<String> addTask(@PathVariable(name = "user") String username,
+                                          @RequestBody Task task,
+                                          Principal principal){
+        if(!principal.getName().equals(username))
+            return ResponseEntity.badRequest().body("Error: Unauthorized");
         String message;
         try {
             taskService.addTask(username, task);
@@ -47,7 +52,11 @@ public class TaskController {
 
     @DeleteMapping(path = {"{user}"})
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<String> deleteTask(@PathVariable(name="user") String username, @RequestParam(name = "taskID") Long taskID){
+    public ResponseEntity<String> deleteTask(@PathVariable(name="user") String username,
+                                             @RequestParam(name = "taskID") Long taskID,
+                                             Principal principal){
+        if(!principal.getName().equals(username))
+            return ResponseEntity.badRequest().body("Error: Unauthorized");
         String message;
         try{
             taskService.deleteTask(username, taskID);
@@ -60,7 +69,10 @@ public class TaskController {
 
     @DeleteMapping(path = "{user}/deleteTasks")
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<String> deleteAllUsersTasks(@PathVariable(name="user") String username){
+    public ResponseEntity<String> deleteAllUsersTasks(@PathVariable(name="user") String username,
+                                                      Principal principal){
+        if(!principal.getName().equals(username))
+            return ResponseEntity.badRequest().body("Error: Unauthorized");
         try{
             taskService.deleteAllTasksByUser(username);
             String message = "All tasks by " + username + " deleted successfully";
