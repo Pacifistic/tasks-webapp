@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.security.Principal;
-import java.util.Collections;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -21,27 +20,22 @@ public class TaskController {
     @Autowired
     TaskService taskService;
 
-    @GetMapping(path = "{user}")
+    @GetMapping(path = "/user")
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<?> getTasks(@PathVariable(name = "user") String user, Principal principal){
-        if(!principal.getName().equals(user))
-            return ResponseEntity.badRequest().body(new MessageResponse("Error: Unauthorized"));
+    public ResponseEntity<?> getTasks(Principal principal){
         try {
-            return ResponseEntity.ok(taskService.getTasks(user));
+            return ResponseEntity.ok(taskService.getTasks(principal.getName()));
         } catch (UserException e) {
             return ResponseEntity.badRequest().body(new MessageResponse(e.getMessage()));
         }
     }
 
-    @PostMapping(path = "{user}")
+    @PostMapping(path = "/user")
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<?> addTask(@PathVariable(name = "user") String username,
-                                          @Valid @RequestBody Task task,
+    public ResponseEntity<?> addTask(@Valid @RequestBody Task task,
                                           Principal principal){
-        if(!principal.getName().equals(username))
-            return ResponseEntity.badRequest().body(new MessageResponse("Error: Unauthorized"));
         try {
-            taskService.addTask(username, task);
+            taskService.addTask(principal.getName(), task);
             return ResponseEntity.ok(new MessageResponse("task '" + task.getName() + "' added successfully!"));
         }
         catch (UserException e){
@@ -49,30 +43,24 @@ public class TaskController {
         }
     }
 
-    @DeleteMapping(path = {"{user}"})
+    @DeleteMapping(path = {"/user"})
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<?> deleteTask(@PathVariable(name="user") String username,
-                                             @RequestParam(name = "taskID") Long taskID,
+    public ResponseEntity<?> deleteTask(@RequestParam(name = "taskID") Long taskID,
                                              Principal principal){
-        if(!principal.getName().equals(username))
-            return ResponseEntity.badRequest().body(new MessageResponse("Error: Unauthorized"));
         try{
-            taskService.deleteTask(username, taskID);
+            taskService.deleteTask(principal.getName(), taskID);
             return ResponseEntity.ok(new MessageResponse("task deleted successfully"));
         } catch (TaskException e) {
             return ResponseEntity.badRequest().body(new MessageResponse(e.getMessage()));
         }
     }
 
-    @DeleteMapping(path = "{user}/deleteTasks")
+    @DeleteMapping(path = "user/deleteTasks")
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<?> deleteAllUsersTasks(@PathVariable(name="user") String username,
-                                                      Principal principal){
-        if(!principal.getName().equals(username))
-            return ResponseEntity.badRequest().body(new MessageResponse("Error: Unauthorized"));
+    public ResponseEntity<?> deleteAllUsersTasks(Principal principal){
         try{
-            taskService.deleteAllTasksByUser(username);
-            return ResponseEntity.ok(new MessageResponse("All tasks by " + username + " deleted successfully"));
+            taskService.deleteAllTasksByUser(principal.getName());
+            return ResponseEntity.ok(new MessageResponse("All tasks by " + principal.getName() + " deleted successfully"));
         } catch (UserException e) {
             return ResponseEntity.badRequest().body(new MessageResponse(e.getMessage()));
         }
