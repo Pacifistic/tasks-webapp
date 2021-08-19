@@ -32,6 +32,17 @@ public class TaskService {
         taskRepo.save(task);
     }
 
+    @Transactional
+    public void updateTask(String username, Long taskID, Task task) {
+        Task originalTask = findTask(taskID);
+        User owner = findUser(username);
+        if(!originalTask.getUser().equals(owner))
+            throw new UserException("unauthorized");
+        originalTask.setName(task.getName());
+        originalTask.setDesc(task.getDesc());
+        originalTask.setStart(task.getStart());
+    }
+
     public void deleteTask(String username, Long taskID) throws TaskException{
         User user = findUser(username);
         Task task = findTask(taskID);
@@ -61,4 +72,6 @@ public class TaskService {
             throw new TaskException("Task ID " + taskID + " not found.");
         return task.get();
     }
+
+
 }

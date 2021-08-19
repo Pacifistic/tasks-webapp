@@ -20,7 +20,7 @@ public class TaskController {
     @Autowired
     TaskService taskService;
 
-    @GetMapping(path = "/user")
+    @GetMapping//(path = "/user")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<?> getTasks(Principal principal){
         try {
@@ -30,7 +30,7 @@ public class TaskController {
         }
     }
 
-    @PostMapping(path = "/user")
+    @PostMapping//(path = "/user")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<?> addTask(@Valid @RequestBody Task task,
                                           Principal principal){
@@ -43,7 +43,20 @@ public class TaskController {
         }
     }
 
-    @DeleteMapping(path = {"/user"})
+    @PutMapping//(path = "/user")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<?> updateTask(@RequestParam(name = "taskID") Long taskID,
+                                        @Valid @RequestBody Task task,
+                                        Principal principal){
+        try{
+            taskService.updateTask(principal.getName(), taskID, task);
+            return ResponseEntity.ok(new MessageResponse("task updated successfully"));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(new MessageResponse(e.getMessage()));
+        }
+    }
+
+    @DeleteMapping//(path = {"/user"})
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<?> deleteTask(@RequestParam(name = "taskID") Long taskID,
                                              Principal principal){
@@ -55,7 +68,7 @@ public class TaskController {
         }
     }
 
-    @DeleteMapping(path = "user/deleteTasks")
+    @DeleteMapping(path = "/deleteTasks")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<?> deleteAllUsersTasks(Principal principal){
         try{
