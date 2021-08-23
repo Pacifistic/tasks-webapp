@@ -8,6 +8,7 @@ import org.hibernate.annotations.OnDeleteAction;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import java.time.Duration;
 import java.time.LocalDateTime;
 
 @Entity
@@ -34,11 +35,58 @@ public class Task {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime start;
 
-//    private Boolean repeating;
-//
-//    private Duration frequency;
-//
-//    @Column(columnDefinition = "TIMESTAMP")
+    private Boolean repeating;
+
+    private Duration frequency;
+
+    @Column(columnDefinition = "TIMESTAMP")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime lastTime;
+
+    @Column(columnDefinition = "TIMESTAMP")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime end;
+
+    public Task(String name, String desc, LocalDateTime start, Boolean repeating, Duration frequency, LocalDateTime end) {
+        this.name = name;
+        this.desc = desc;
+        this.start = start;
+        this.repeating = repeating;
+        this.frequency = frequency;
+        this.end = end;
+    }
+
+    public Boolean getRepeating() {
+        return repeating;
+    }
+
+    public void setRepeating(Boolean repeating) {
+        this.repeating = repeating;
+    }
+
+    public Duration getFrequency() {
+        return frequency;
+    }
+
+    public void setFrequency(Duration frequency) {
+        this.frequency = frequency;
+    }
+
+    public LocalDateTime getLastTime() {
+        return lastTime;
+    }
+
+    public void setLastTime(LocalDateTime lastTime) {
+        this.lastTime = lastTime;
+    }
+
+    public LocalDateTime getEnd() {
+        return end;
+    }
+
+    public void setEnd(LocalDateTime end) {
+        this.end = end;
+    }
 
     public Long getId() {
         return id;
@@ -79,7 +127,6 @@ public class Task {
     public void setStart(LocalDateTime start) {
         this.start = start;
     }
-//    private LocalDateTime end;
 
     public Task(String name, String desc, LocalDateTime start) {
         this.name = name;
