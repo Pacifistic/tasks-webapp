@@ -2,8 +2,6 @@ package com.redarmdevs.taskswebapp.models;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -45,7 +43,7 @@ public class Task {
 
     @Column(columnDefinition = "TIMESTAMP")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime end;
+    private LocalDateTime endTime;
 
     public Task(String name, String desc, LocalDateTime start, Boolean repeating, Duration frequency, LocalDateTime end) {
         this.name = name;
@@ -53,7 +51,7 @@ public class Task {
         this.start = start;
         this.repeating = repeating;
         this.frequency = frequency;
-        this.end = end;
+        this.endTime = end;
     }
 
     public Boolean getRepeating() {
@@ -80,12 +78,12 @@ public class Task {
         this.lastTime = lastTime;
     }
 
-    public LocalDateTime getEnd() {
-        return end;
+    public LocalDateTime getEndTime() {
+        return endTime;
     }
 
-    public void setEnd(LocalDateTime end) {
-        this.end = end;
+    public void setEndTime(LocalDateTime end) {
+        this.endTime = end;
     }
 
     public Long getId() {

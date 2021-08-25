@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.Optional;
-import java.util.Set;
+import java.util.List;
 
 @Service
 public class TaskService {
@@ -21,7 +21,7 @@ public class TaskService {
     @Autowired
     UserRepository userRepo;
 
-    public Set<Task> getTasks(String username) throws UserException {
+    public List<Task> getTasks(String username) throws UserException {
         User user = findUser(username);
         return user.getTasks();
     }
