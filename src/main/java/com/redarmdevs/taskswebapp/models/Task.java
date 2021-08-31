@@ -29,11 +29,11 @@ public class Task {
     @JsonIgnore
     private User user;
 
-    @Column(columnDefinition = "TIMESTAMP")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime start;
+    //@Column(columnDefinition = "TIMESTAMP")
+    //@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    //private LocalDateTime start;
 
-    private Boolean repeating;
+    //private Boolean repeating;
 
     private Duration frequency;
 
@@ -41,25 +41,19 @@ public class Task {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime lastTime;
 
-    @Column(columnDefinition = "TIMESTAMP")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime endTime;
+//    @Column(columnDefinition = "TIMESTAMP")
+//    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+//    private LocalDateTime endTime;
 
-    public Task(String name, String desc, LocalDateTime start, Boolean repeating, Duration frequency, LocalDateTime end) {
+    public Task(String name, String desc, Duration frequency) {
         this.name = name;
         this.desc = desc;
-        this.start = start;
-        this.repeating = repeating;
         this.frequency = frequency;
-        this.endTime = end;
     }
 
-    public Boolean getRepeating() {
-        return repeating;
-    }
-
-    public void setRepeating(Boolean repeating) {
-        this.repeating = repeating;
+    public Task(String name, Duration frequency) {
+        this.name = name;
+        this.frequency = frequency;
     }
 
     public Duration getFrequency() {
@@ -76,14 +70,6 @@ public class Task {
 
     public void setLastTime(LocalDateTime lastTime) {
         this.lastTime = lastTime;
-    }
-
-    public LocalDateTime getEndTime() {
-        return endTime;
-    }
-
-    public void setEndTime(LocalDateTime end) {
-        this.endTime = end;
     }
 
     public Long getId() {
@@ -116,25 +102,6 @@ public class Task {
 
     public void setUser(User user) {
         this.user = user;
-    }
-
-    public LocalDateTime getStart() {
-        return start;
-    }
-
-    public void setStart(LocalDateTime start) {
-        this.start = start;
-    }
-
-    public Task(String name, String desc, LocalDateTime start) {
-        this.name = name;
-        this.desc = desc;
-        this.start = start;
-    }
-
-    public Task(String name, LocalDateTime start) {
-        this.name = name;
-        this.start = start;
     }
 
     public Task() {

@@ -40,7 +40,7 @@ public class TaskService {
             throw new UserException("unauthorized");
         originalTask.setName(task.getName());
         originalTask.setDesc(task.getDesc());
-        originalTask.setStart(task.getStart());
+        originalTask.setFrequency(task.getFrequency());
     }
 
     public void deleteTask(String username, Long taskID) throws TaskException{
