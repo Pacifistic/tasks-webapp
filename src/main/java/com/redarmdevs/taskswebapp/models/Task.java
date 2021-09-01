@@ -35,6 +35,7 @@ public class Task {
 
     //private Boolean repeating;
 
+    @JsonFormat(pattern = "HOURS")
     private Duration frequency;
 
     @Column(columnDefinition = "TIMESTAMP")
@@ -54,6 +55,11 @@ public class Task {
     public Task(String name, Duration frequency) {
         this.name = name;
         this.frequency = frequency;
+    }
+
+    public Task(String name, String desc) {
+        this.name = name;
+        this.desc = desc;
     }
 
     public Duration getFrequency() {

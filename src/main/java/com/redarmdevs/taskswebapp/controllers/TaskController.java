@@ -78,4 +78,16 @@ public class TaskController {
             return ResponseEntity.badRequest().body(new MessageResponse(e.getMessage()));
         }
     }
+
+    @PatchMapping
+    @PreAuthorize(("hasRole('USER')"))
+    public ResponseEntity<?> completeTask(@RequestParam(name = "taskID") Long taskID,
+                                          Principal principal){
+        try{
+            taskService.completeTask(principal.getName(), taskID);
+            return ResponseEntity.ok(new MessageResponse("task updated"));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(new MessageResponse(e.getMessage()));
+        }
+    }
 }
