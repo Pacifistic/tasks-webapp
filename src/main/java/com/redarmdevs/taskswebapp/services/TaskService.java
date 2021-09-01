@@ -10,7 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.Optional;
 import java.util.List;
 
@@ -24,6 +26,31 @@ public class TaskService {
 
     public List<Task> getTasks(String username) throws UserException {
         User user = findUser(username);
+        List<Task> tasks = user.getTasks();
+        tasks.sort(new Comparator<Task>() {
+            @Override
+            public int compare(Task o1, Task o2) {
+                if(o1.getFrequency().equals(Duration.ZERO) && o2.getFrequency().equals(Duration.ZERO)) {
+                    if (o1.getLastTime() == null && o2.getLastTime() == null)
+                        return 0;
+                    else if (o1.getLastTime() == null)
+                        return -1;
+                    else if (o2.getLastTime() == null)
+                        return 1;
+                }
+                else if(o1.getFrequency().equals(Duration.ZERO) && !o2.getFrequency().equals(Duration.ZERO))
+                    return 1;
+                else if(!o1.getFrequency().equals(Duration.ZERO) && o2.getFrequency().equals(Duration.ZERO))
+                    return -1;
+                else if(o1.getLastTime() == null && o2.getLastTime() == null)
+                    return o1.getFrequency().compareTo(o2.getFrequency());
+                else if(o1.getLastTime() == null)
+                    return -1;
+                else if(o2.getLastTime() == null)
+                    return 1;
+                return o1.getLastTime().plus(o1.getFrequency()).compareTo(o2.getLastTime().plus(o2.getFrequency()));
+            }
+        });
         return user.getTasks();
     }
 
