@@ -84,8 +84,7 @@ public class TaskController {
     public ResponseEntity<?> completeTask(@RequestParam(name = "taskID") Long taskID,
                                           Principal principal){
         try{
-            taskService.completeTask(principal.getName(), taskID);
-            return ResponseEntity.ok(new MessageResponse("task updated"));
+            return ResponseEntity.ok(taskService.completeTask(principal.getName(), taskID));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(new MessageResponse(e.getMessage()));
         }

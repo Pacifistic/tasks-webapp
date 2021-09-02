@@ -51,7 +51,7 @@ public class TaskService {
                 return o1.getLastTime().plus(o1.getFrequency()).compareTo(o2.getLastTime().plus(o2.getFrequency()));
             }
         });
-        return user.getTasks();
+        return tasks;
     }
 
     public void addTask(String username, Task task) throws UserException {
@@ -102,11 +102,13 @@ public class TaskService {
     }
 
     @Transactional
-    public void completeTask(String username, Long taskID) {
+    public LocalDateTime completeTask(String username, Long taskID) {
         User user = findUser(username);
         Task task = findTask(taskID);
         if(!task.getUser().equals(user))
             throw new UserException("unauthorized");
-        task.setLastTime(LocalDateTime.now());
+        LocalDateTime now = LocalDateTime.now();
+        task.setLastTime(now);
+        return now;
     }
 }
