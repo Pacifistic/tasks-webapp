@@ -21,6 +21,19 @@ public class Role {
         this.name = name;
     }
 
+    public Role(String name){
+        switch (name){
+            case "ROLE_USER":
+                this.name = ERole.ROLE_USER;
+                break;
+            case "ROLE_ADMIN":
+                this.name = ERole.ROLE_ADMIN;
+                break;
+            default:
+                throw new RuntimeException("INVALID ROLE NAME: " + name);
+        }
+    }
+
     public Integer getId() {
         return id;
     }
